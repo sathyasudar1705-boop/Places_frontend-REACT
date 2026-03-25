@@ -1,9 +1,22 @@
 .card {
   position: relative;
   margin: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  border-radius: 6px;
-  padding: 1rem;
+  background: var(--surface-color);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 
+    var(--shadow-premium),
+    inset 0 0 20px rgba(255, 255, 255, 0.02);
+  border-radius: 16px;
+  padding: 2rem;
   overflow: hidden;
-  background: white;
+  transition: var(--transition-smooth);
 }
+
+.card:hover {
+  transform: translateY(-6px) scale(1.01);
+  border-color: rgba(0, 229, 255, 0.2);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+}
+
+
