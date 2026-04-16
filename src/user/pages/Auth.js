@@ -34,11 +34,14 @@ const Auth = () => {
     false,
   );
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+
   const switchAuthModeHandler = () => {
     if (!isLoginMode) {
       setFormData(
         {
-            ...formState.inputs,
+          ...formState.inputs,
           name: undefined,
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid,
@@ -58,11 +61,63 @@ const Auth = () => {
     setIsLoginMode((prevMode) => !prevMode);
   };
 
-  const authSubmitHandler = (event) => {
+  const authSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log(formState.inputs);
-    auth.login();
+    setIsLoading(true);
+
+    if (isLoginMode) {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000/api'}/users/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: formState.inputs.email.value,
+            password: formState.inputs.password.value,
+          }),
+        });
+
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+        setIsLoading(false);
+        auth.login(responseData.user.id);
+      } catch (err) {
+        setIsLoading(false);
+        setError(err.message || "Something went wrong, please try again.");
+        alert(err.message);
+      }
+    } else {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000/api'}/users/signup`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: formState.inputs.name.value,
+            email: formState.inputs.email.value,
+            password: formState.inputs.password.value,
+          }),
+        });
+
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+        setIsLoading(false);
+        auth.login(responseData.user.id);
+      } catch (err) {
+
+        setIsLoading(false);
+        setError(err.message || "Something went wrong, please try again.");
+        alert(err.message);
+      }
+    }
   };
+
 
   return (
     <Card className="authentication">

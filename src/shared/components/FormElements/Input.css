@@ -34,36 +34,26 @@
 .form-control textarea::placeholder {
   color: var(--text-secondary);
   opacity: 0.6;
-}
-
-/* Chrome autofill override */
-.form-control input:-webkit-autofill,
-.form-control textarea:-webkit-autofill {
-  -webkit-text-fill-color: #111;
-  -webkit-box-shadow: 0 0 0px 1000px var(--surface-color) inset;
-  transition: background-color 5000s ease-in-out 0s;
-}
-
 .form-control input:focus,
 .form-control textarea:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
   border-color: var(--primary-color);
-  box-shadow: 0 0 10px var(--primary-glow);
+  box-shadow: 0 0 15px var(--primary-glow);
 }
 
 .form-control--invalid label,
 .form-control--invalid p {
-  color: #ff4d4d;
+  color: var(--accent-pink);
 }
 
 .form-control--invalid input,
 .form-control--invalid textarea {
-  border-color: #ff4d4d;
-  background: rgba(255, 77, 77, 0.05);
+  background: rgba(244, 114, 182, 0.05);
+  border-color: var(--accent-pink);
 }
 
 .form-control p {
   font-size: 0.85rem;
   margin-top: 0.5rem;
-}
+}}

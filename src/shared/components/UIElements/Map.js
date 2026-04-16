@@ -1,15 +1,33 @@
 import React, { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+// Fix for default marker icon missing in React builds
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
+
+let DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
+
 
 // Hook to fix map rendering inside modal
 const MapResize = () => {
   const map = useMap();
   useEffect(() => {
-    map.invalidateSize();
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 200);
   }, [map]);
   return null;
 };
+
 
 const Map = ({ center, zoom, className, style }) => {
   return (

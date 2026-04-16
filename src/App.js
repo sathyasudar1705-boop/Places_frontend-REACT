@@ -11,18 +11,23 @@ import UserPlaces from "./places/pages/UserPlaces";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import UpdatePlace from "./places/pages/UpdatePlace";
 import Auth from "./user/pages/Auth";
+import LandingPage from "./shared/pages/LandingPage";
 import { AuthContext } from "./shared/context/auth-context";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userId, setUserId] = useState(false);
 
-  const login = useCallback(() => {
+  const login = useCallback((uid) => {
     setIsLoggedIn(true);
+    setUserId(uid);
   }, []);
 
   const logout = useCallback(() => {
     setIsLoggedIn(false);
+    setUserId(null);
   }, []);
+
 
   let routes;
 
@@ -30,7 +35,7 @@ const App = () => {
     routes = (
       <Switch>
         <Route path="/" exact>
-          <Users />
+          <LandingPage />
         </Route>
         <Route path="/:userId/places" exact>
           <UserPlaces />
@@ -48,22 +53,25 @@ const App = () => {
     routes = (
       <Switch>
         <Route path="/" exact>
-          <Users />
-        </Route>
-        <Route path="/:userId/places" exact>
-          <UserPlaces />
+          <LandingPage />
         </Route>
         <Route path="/auth">
           <Auth />
         </Route>
-        <Redirect to="/auth" />
+        <Redirect to="/" />
       </Switch>
     );
   }
 
+
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn: isLoggedIn, login: login, logout: logout }}
+      value={{
+        isLoggedIn: isLoggedIn,
+        userId: userId,
+        login: login,
+        logout: logout,
+      }}
     >
       <Router>
         <MainNavigation />

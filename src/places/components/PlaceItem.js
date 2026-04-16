@@ -12,6 +12,8 @@ const PlaceItem = (props) => {
   const [showMap, setShowMap] = useState(false);
 
   const [showConfirmModel, setShowConfirmModel] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
 
   const openMapHandler = () => setShowMap(true);
   const closeMapHandler = () => setShowMap(false);
@@ -23,13 +25,31 @@ const PlaceItem = (props) => {
     setShowConfirmModel(false);
   };
 
-  const confirmDeleteHandler = () => {
+  const confirmDeleteHandler = async () => {
     setShowConfirmModel(false);
-    console.log("DELETING...");
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000/api'}/places/${props.id}`, {
+        method: "DELETE",
+      });
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message);
+      }
+      props.onDelete(props.id);
+    } catch (err) {
+      setError(err.message);
+      alert(err.message);
+    }
+    setIsLoading(false);
   };
 
   // Convert location object to array for Leaflet
-  const coordinatesArray = [props.coordinates.lat, props.coordinates.lng];
+  console.log("Current Coordinates:", props.coordinates);
+  const coordinatesArray = props.coordinates && props.coordinates.lat && props.coordinates.lng 
+    ? [props.coordinates.lat, props.coordinates.lng] 
+    : [0, 0];
+
 
   return (
     <>
@@ -72,25 +92,35 @@ const PlaceItem = (props) => {
       </Modal>
       <li className="place-item">
         <Card className="place-item__content">
+          {isLoading && <div className="center">Loading...</div>}
           <div className="place-item__image">
             <img src={props.image} alt={props.title} />
           </div>
-          <div className="place-item__info">
-            <h2>{props.title}</h2>
-            <h3>{props.address}</h3>
-            <p>{props.description}</p>
-          </div>
-          <div className="place-item__actions">
-            <Button inverse onClick={openMapHandler}>
-              VIEW ON MAP
-            </Button>
-            {auth.isLoggedIn && <Button to={`/places/${props.id}`}>EDIT</Button>}
-            {auth.isLoggedIn && <Button to={`/places/${props.id}`}>SHOW</Button>}
+          <div className="place-item__info-container">
+            <div className="place-item__info">
+              <h2>{props.title}</h2>
+              <h3>{props.address}</h3>
+              <p>{props.description}</p>
+            </div>
+            <div className="place-item__actions">
+              <Button inverse onClick={openMapHandler}>
+                VIEW ON MAP
+              </Button>
+              {auth.userId === props.creatorId && (
+                <Button to={`/places/${props.id}`}>EDIT</Button>
+              )}
+              {auth.userId === props.creatorId && (
+                <Button danger onClick={showDeleteWarningHandler}>
+                  DELETE
+                </Button>
+              )}
+            </div>
           </div>
         </Card>
       </li>
     </>
   );
+
 };
 
 export default PlaceItem;
