@@ -15,7 +15,6 @@ import "./PlaceForm.css";
 const NewPlace = () => {
   const auth = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
   const history = useHistory();
 
   const [formState, inputHandler] = useForm({
@@ -65,7 +64,6 @@ const NewPlace = () => {
       history.push("/");
     } catch (err) {
       setIsLoading(false);
-      setError(err.message || "Something went wrong.");
       alert(err.message);
     }
   };

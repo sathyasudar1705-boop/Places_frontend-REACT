@@ -13,7 +13,6 @@ const PlaceItem = (props) => {
 
   const [showConfirmModel, setShowConfirmModel] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
 
   const openMapHandler = () => setShowMap(true);
   const closeMapHandler = () => setShowMap(false);
@@ -38,7 +37,6 @@ const PlaceItem = (props) => {
       }
       props.onDelete(props.id);
     } catch (err) {
-      setError(err.message);
       alert(err.message);
     }
     setIsLoading(false);

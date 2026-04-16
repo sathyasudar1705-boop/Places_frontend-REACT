@@ -34,8 +34,6 @@ const Auth = () => {
     false,
   );
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
 
   const switchAuthModeHandler = () => {
     if (!isLoginMode) {
@@ -63,7 +61,6 @@ const Auth = () => {
 
   const authSubmitHandler = async (event) => {
     event.preventDefault();
-    setIsLoading(true);
 
     if (isLoginMode) {
       try {
@@ -82,11 +79,8 @@ const Auth = () => {
         if (!response.ok) {
           throw new Error(responseData.message);
         }
-        setIsLoading(false);
         auth.login(responseData.user.id);
       } catch (err) {
-        setIsLoading(false);
-        setError(err.message || "Something went wrong, please try again.");
         alert(err.message);
       }
     } else {
@@ -107,13 +101,9 @@ const Auth = () => {
         if (!response.ok) {
           throw new Error(responseData.message);
         }
-        setIsLoading(false);
         auth.login(responseData.user.id);
       } catch (err) {
-
-        setIsLoading(false);
-        setError(err.message || "Something went wrong, please try again.");
-        alert(err.message);
+        alert(err.message || "Something went wrong, please try again.");
       }
     }
   };

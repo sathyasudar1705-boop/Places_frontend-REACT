@@ -4,7 +4,6 @@ import PlaceList from "../components/PlaceList";
 
 const UserPlaces = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
   const [loadedPlaces, setLoadedPlaces] = useState();
   const userId = useParams().userId;
 
@@ -19,7 +18,7 @@ const UserPlaces = () => {
         }
         setLoadedPlaces(responseData.places);
       } catch (err) {
-        setError(err.message);
+        alert(err.message);
       }
       setIsLoading(false);
     };

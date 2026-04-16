@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
 import Button from "../components/FormElements/Button";
 import { AuthContext } from "../context/auth-context";
 import bgImage from "../../Assets/main.jpg";
